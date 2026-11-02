@@ -1,0 +1,12 @@
+Release {{ .Release.Name }} (revision {{ .Release.Revision }}) is running in namespace {{ .Release.Namespace }}.
+Environment: {{ include "webapp.environment" . }}, replicas: {{ .Values.replicaCount }}
+{{- if eq .Values.service.type "NodePort" }}
+
+Open the page from the host:
+  curl http://localhost:{{ .Values.service.nodePort }}
+{{- else }}
+
+Forward a local port, then open the page:
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "webapp.fullname" . }} 8080:{{ .Values.service.port }}
+  curl http://localhost:8080
+{{- end }}

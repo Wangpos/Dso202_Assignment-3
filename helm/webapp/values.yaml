@@ -1,0 +1,47 @@
+# values.yaml - default configuration of the webapp chart.
+# Every key below can be overridden with -f <file> or --set <key>=<value>.
+
+# Number of Pod replicas the Deployment maintains.
+replicaCount: 1
+
+image:
+  repository: nginx
+  # An empty tag means "use .Chart.AppVersion" (see templates/deployment.yaml)
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Content of the page. page.environment has no default on purpose:
+# the chart refuses to render until an environment is chosen, either here
+# or through global.environment.
+page:
+  title: "DSO202 Helm Demo"
+  message: "Deployed by Helm"
+  environment: ""
+
+service:
+  # ClusterIP or NodePort.
+  type: ClusterIP
+  port: 80
+  # Used only when type is NodePort. Must be in the range 30000-32767.
+  nodePort: null
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 64Mi
+
+# Extra annotations added to every Pod.
+podAnnotations: {}
+
+# Values shared between a parent chart and all of its subcharts (3.2.5).
+# Declared here so that .Values.global.environment can be read safely when
+# this chart is installed on its own.
+global:
+  environment: ""
+
+# Override the generated object names.
+nameOverride: ""
+fullnameOverride: ""

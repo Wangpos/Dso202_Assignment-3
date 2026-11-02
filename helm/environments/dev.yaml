@@ -1,0 +1,8 @@
+# environments/dev.yaml - overrides for the development release.
+replicaCount: 1
+page:
+  environment: dev
+  message: "Development build - not for customers"
+service:
+  type: NodePort
+  nodePort: 30080

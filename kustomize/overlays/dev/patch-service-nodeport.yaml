@@ -1,0 +1,11 @@
+# Strategic merge patch: expose dev on host port 30081 (mapped by kind).
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      nodePort: 30081

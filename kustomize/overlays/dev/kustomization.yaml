@@ -1,0 +1,50 @@
+# overlays/dev/kustomization.yaml - dev differs from the base only here.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Compose
+resources:
+  - ../../base
+  - namespace.yaml
+
+# Cross-cutting transforms
+namespace: webapp-dev
+
+labels:
+  - pairs:
+      app.kubernetes.io/environment: dev
+      debug: "true"
+    includeSelectors: false
+    includeTemplates: true
+
+# Purpose-built changes
+replicas:
+  - name: webapp
+    count: 1
+
+images:
+  - name: nginx
+    newTag: 1.29-alpine        # experimental tag
+
+# Generated resources
+configMapGenerator:
+  - name: web-content
+    behavior: replace
+    files:
+      - index.html
+  - name: app-config
+    envs:
+      - app.env
+
+# Precise customizations
+patches:
+  - path: patch-service-nodeport.yaml
+  - target:
+      kind: Deployment
+      name: webapp
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/envFrom
+        value:
+          - configMapRef:
+              name: app-config

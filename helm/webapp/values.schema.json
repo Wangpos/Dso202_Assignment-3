@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "webapp values",
+  "type": "object",
+  "required": ["replicaCount", "image", "page", "service", "resources"],
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag", "pullPolicy"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "tag":        { "type": "string" },
+        "pullPolicy": { "enum": ["Always", "IfNotPresent", "Never"] }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["title", "message", "environment"],
+      "properties": {
+        "title":       { "type": "string" },
+        "message":     { "type": "string" },
+        "environment": { "enum": ["", "dev", "staging", "prod"] }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": ["type", "port"],
+      "properties": {
+        "type":     { "enum": ["ClusterIP", "NodePort"] },
+        "port":     { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "nodePort": { "type": ["integer", "null"], "minimum": 30000, "maximum": 32767 }
+      }
+    },
+    "global": {
+      "type": "object",
+      "properties": {
+        "environment": { "enum": ["", "dev", "staging", "prod"] }
+      }
+    },
+    "resources":        { "type": "object" },
+    "podAnnotations":   { "type": "object" },
+    "nameOverride":     { "type": "string" },
+    "fullnameOverride": { "type": "string" }
+  }
+}

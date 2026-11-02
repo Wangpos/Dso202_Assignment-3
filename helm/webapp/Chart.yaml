@@ -1,0 +1,13 @@
+# Chart.yaml - identity and metadata of the chart.
+apiVersion: v2                 # chart API version; v2 is the format for Helm 3 and 4
+name: webapp                   # chart name; must match the directory name
+description: A static web page served by nginx, used in DSO202 Unit III 3.2
+type: application              # "application" renders objects; "library" only provides helpers
+version: 0.1.0                 # version of the CHART (the package); SemVer 2
+appVersion: "1.30-alpine"      # version of the APPLICATION inside; quoted so YAML keeps it a string
+kubeVersion: ">=1.30.0-0"      # refuse to install on clusters older than Kubernetes 1.30
+keywords:
+  - nginx
+  - dso202
+maintainers:
+  - name: DSO202 Module Team

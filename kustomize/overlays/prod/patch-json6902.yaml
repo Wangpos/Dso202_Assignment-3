@@ -1,0 +1,9 @@
+# JSON 6902 patch: exact path operations. "/" in a key is escaped as "~1".
+- op: add
+  path: /metadata/annotations
+  value: {}
+- op: add
+  path: /metadata/annotations/training.example.com~1owner
+  value: platform-team
+- op: remove
+  path: /spec/template/spec/containers/0/readinessProbe/periodSeconds

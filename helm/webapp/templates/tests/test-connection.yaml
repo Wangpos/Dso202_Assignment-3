@@ -1,0 +1,32 @@
+{{- /*
+tests/test-connection.yaml - run by "helm test". The Pod must exit 0 for the
+test to pass. The hook annotation stops it being created by install/upgrade.
+*/}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "webapp.fullname" . }}-test-connection
+  labels:
+    {{- include "webapp.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  restartPolicy: Never
+  containers:
+    - name: wget
+      image: busybox:1.37
+      # A block scalar (|) is used because the script contains ": ", which
+      # YAML would otherwise read as a key-value separator.
+      command:
+        - sh
+        - -c
+        - |
+          wget -qO- http://{{ include "webapp.fullname" . }}:{{ .Values.service.port }} | grep "Environment: {{ include "webapp.environment" . }}"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 50m
+          memory: 32Mi

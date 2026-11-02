@@ -1,0 +1,22 @@
+{{- /*
+configmap.yaml - the HTML page served by nginx.
+*/}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webapp.fullname" . }}
+  labels:
+    {{- include "webapp.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+      <head><title>{{ .Values.page.title }}</title></head>
+      <body>
+        <h1>{{ .Values.page.title }}</h1>
+        <p>{{ .Values.page.message }}</p>
+        <p>Environment: {{ include "webapp.environment" . }}</p>
+        <p>Release: {{ .Release.Name }} in namespace {{ .Release.Namespace }}</p>
+        <p>Chart: {{ include "webapp.chart" . }}, application version {{ .Chart.AppVersion }}</p>
+      </body>
+    </html>

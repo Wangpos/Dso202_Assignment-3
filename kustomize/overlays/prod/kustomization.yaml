@@ -1,0 +1,45 @@
+# overlays/prod/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+namespace: webapp-prod
+
+labels:
+  - pairs:
+      app.kubernetes.io/environment: prod
+    includeSelectors: false
+    includeTemplates: true
+
+replicas:
+  - name: webapp
+    count: 4
+
+images:
+  - name: nginx
+    newTag: 1.27-alpine        # pinned release
+
+configMapGenerator:
+  - name: web-content
+    behavior: replace
+    files:
+      - index.html
+
+# Dummy credentials for the lab only - never commit real secrets.
+secretGenerator:
+  - name: app-secret
+    literals:
+      - username=demo-user
+      - password=demo-password
+
+patches:
+  - path: patch-resources.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: webapp
+    path: patch-json6902.yaml

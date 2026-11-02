@@ -1,0 +1,29 @@
+# overlays/staging/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+namespace: webapp-staging
+
+labels:
+  - pairs:
+      app.kubernetes.io/environment: staging
+    includeSelectors: false
+    includeTemplates: true
+
+replicas:
+  - name: webapp
+    count: 2
+
+images:
+  - name: nginx
+    newTag: 1.28-alpine        # release candidate
+
+configMapGenerator:
+  - name: web-content
+    behavior: replace
+    files:
+      - index.html
