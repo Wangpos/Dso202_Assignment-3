@@ -23,6 +23,7 @@ All work was done on a local three-node kind cluster.
 | Kubernetes (cluster nodes) | v1.36.1 |
 | Host | macOS (Apple Silicon), Docker Desktop |
 
+
 ![Tool versions](screenshots/01-tool-versions.png)
 *Figure 1 — Helm 4, kubectl and kind versions.*
 
